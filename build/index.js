@@ -110,6 +110,7 @@ var Popover = (0, _createReactClass2.default)({
     place: _propTypes.PropTypes.oneOf(_layout2.default.validTypeValues),
     preferPlace: _propTypes.PropTypes.oneOf(_layout2.default.validTypeValues),
     refreshIntervalMs: _propTypes.PropTypes.oneOfType([_propTypes.PropTypes.number, _propTypes.PropTypes.bool]),
+    slideOpen: _propTypes.PropTypes.bool,
     style: _propTypes.PropTypes.object,
     tipSize: _propTypes.PropTypes.number,
     onOuterAction: _propTypes.PropTypes.func
@@ -123,6 +124,7 @@ var Popover = (0, _createReactClass2.default)({
       place: null,
       offset: 4,
       isOpen: false,
+      slideOpen: false,
       onOuterAction: function noOperation() {},
       enterExitTransitionDurationMs: 500,
       children: null,
@@ -346,7 +348,11 @@ var Popover = (0, _createReactClass2.default)({
     this.setState({ exiting: true });
     this.exitingAnimationTimer2 = setTimeout(function () {
       setTimeout(function () {
-        _this.containerEl.style.transform = flowToPopoverTranslations[_this.zone.flow] + "(" + _this.zone.order * 50 + "px)";
+        if (_this.props.slide) {
+          _this.containerEl.style.transform = "scaleY(0)";
+        } else {
+          _this.containerEl.style.transform = flowToPopoverTranslations[_this.zone.flow] + "(" + _this.zone.order * 50 + "px)";
+        }
         _this.containerEl.style.opacity = "0";
       }, 0);
     }, 0);
@@ -358,7 +364,12 @@ var Popover = (0, _createReactClass2.default)({
   animateEnter: function animateEnter() {
     /* Prepare `entering` style so that we can then animate it toward `entered`. */
 
-    this.containerEl.style.transform = flowToPopoverTranslations[this.zone.flow] + "(" + this.zone.order * 50 + "px)";
+    if (this.props.slide) {
+      this.containerEl.style.transformOrigin = this.props.place === "below" ? "top" : "bottom";
+      this.containerEl.style.transform = "scaleY(0)";
+    } else {
+      this.containerEl.style.transform = flowToPopoverTranslations[this.zone.flow] + "(" + this.zone.order * 50 + "px)";
+    }
     this.containerEl.style[jsprefix("Transform")] = this.containerEl.style.transform;
     this.containerEl.style.opacity = "0";
 
@@ -371,11 +382,22 @@ var Popover = (0, _createReactClass2.default)({
       this.tipEl.style.transition = "transform 150ms ease-in";
       this.tipEl.style[jsprefix("Transition")] = cssprefix("transform") + " 150ms ease-in";
     }
-    this.containerEl.style.transitionProperty = "top, left, opacity, transform";
+
+    if (this.props.slide) {
+      this.containerEl.style.transitionProperty = "opacity, transform";
+    } else {
+      this.containerEl.style.transitionProperty = "top, left, opacity, transform";
+    }
+
     this.containerEl.style.transitionDuration = this.props.enterExitTransitionDurationMs + "ms";
     this.containerEl.style.transitionTimingFunction = "cubic-bezier(0.230, 1.000, 0.320, 1.000)";
     this.containerEl.style.opacity = "1";
-    this.containerEl.style.transform = "translateY(0)";
+
+    if (this.props.slide) {
+      this.containerEl.style.transform = "scaleY(1)";
+    } else {
+      this.containerEl.style.transform = "translateY(0)";
+    }
     this.containerEl.style[jsprefix("Transform")] = this.containerEl.style.transform;
   },
   trackPopover: function trackPopover() {
