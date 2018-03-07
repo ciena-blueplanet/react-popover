@@ -74,7 +74,8 @@ const Demo = createReactClass({
     return {
       popoverIsOpen: false,
       preferPlace: null,
-      place: null
+      place: null,
+      slide: false
     }
   },
   togglePopover (toState) {
@@ -97,6 +98,10 @@ const Demo = createReactClass({
   changeTip (event) {
     const TipCls = event.target.value === "null" ? undefined : CustomTip
     this.setState({ TipCls })
+  },
+  changeSlide (event) {
+    const slide = event.target.value === "yes"
+    this.setState({ slide })
   },
   render () {
     debug("render")
@@ -135,6 +140,7 @@ const Demo = createReactClass({
       isOpen: this.state.popoverIsOpen,
       preferPlace: this.state.preferPlace,
       place: this.state.place,
+      slide: this.state.slide,
       onOuterAction: this.togglePopover.bind(null, false),
       body: [
         E.h1({}, "Popover Title"),
@@ -157,6 +163,13 @@ const Demo = createReactClass({
           [
             E.option({ key: "null", value: null }, "null"),
             E.option({ key: "custom", value: "custom" }, "custom")
+          ]
+        ),
+        E.label({ htmlFor: "slide" }, "slide "),
+        E.select({ id: "slide", onChange: this.changeSlide },
+          [
+            E.option({ key: "no", value: "no" }, "no"),
+            E.option({ key: "yes", value: "yes" }, "yes")
           ]
         )
 
