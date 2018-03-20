@@ -110,7 +110,7 @@ var Popover = (0, _createReactClass2.default)({
     place: _propTypes.PropTypes.oneOf(_layout2.default.validTypeValues),
     preferPlace: _propTypes.PropTypes.oneOf(_layout2.default.validTypeValues),
     refreshIntervalMs: _propTypes.PropTypes.oneOfType([_propTypes.PropTypes.number, _propTypes.PropTypes.bool]),
-    slideOpen: _propTypes.PropTypes.bool,
+    slide: _propTypes.PropTypes.bool,
     style: _propTypes.PropTypes.object,
     tipSize: _propTypes.PropTypes.number,
     onOuterAction: _propTypes.PropTypes.func
@@ -124,7 +124,7 @@ var Popover = (0, _createReactClass2.default)({
       place: null,
       offset: 4,
       isOpen: false,
-      slideOpen: false,
+      slide: false,
       onOuterAction: function noOperation() {},
       enterExitTransitionDurationMs: 500,
       children: null,
@@ -349,7 +349,25 @@ var Popover = (0, _createReactClass2.default)({
     this.exitingAnimationTimer2 = setTimeout(function () {
       setTimeout(function () {
         if (_this.props.slide) {
-          _this.containerEl.style.transform = "scaleY(0)";
+          switch (_this.props.place) {
+            case "left":
+              {
+                _this.containerEl.style.transform = "scaleX(0)";
+                break;
+              }
+
+            case "right":
+              {
+                _this.containerEl.style.transform = "scaleX(0)";
+                break;
+              }
+
+            // default same as "above" or "below"
+            default:
+              {
+                _this.containerEl.style.transform = "scaleY(0)";
+              }
+          }
         } else {
           _this.containerEl.style.transform = flowToPopoverTranslations[_this.zone.flow] + "(" + _this.zone.order * 50 + "px)";
         }
@@ -365,8 +383,35 @@ var Popover = (0, _createReactClass2.default)({
     /* Prepare `entering` style so that we can then animate it toward `entered`. */
 
     if (this.props.slide) {
-      this.containerEl.style.transformOrigin = this.props.place === "below" ? "top" : "bottom";
-      this.containerEl.style.transform = "scaleY(0)";
+      switch (this.props.place) {
+        case "above":
+          {
+            this.containerEl.style.transformOrigin = "bottom";
+            this.containerEl.style.transform = "scaleY(0)";
+            break;
+          }
+
+        case "left":
+          {
+            this.containerEl.style.transformOrigin = "right";
+            this.containerEl.style.transform = "scaleX(0)";
+            break;
+          }
+
+        case "right":
+          {
+            this.containerEl.style.transformOrigin = "left";
+            this.containerEl.style.transform = "scaleX(0)";
+            break;
+          }
+
+        // default same as "below"
+        default:
+          {
+            this.containerEl.style.transformOrigin = "top";
+            this.containerEl.style.transform = "scaleY(0)";
+          }
+      }
     } else {
       this.containerEl.style.transform = flowToPopoverTranslations[this.zone.flow] + "(" + this.zone.order * 50 + "px)";
     }
@@ -394,7 +439,31 @@ var Popover = (0, _createReactClass2.default)({
     this.containerEl.style.opacity = "1";
 
     if (this.props.slide) {
-      this.containerEl.style.transform = "scaleY(1)";
+      switch (this.props.place) {
+        case "above":
+          {
+            this.containerEl.style.transform = "scaleY(1)";
+            break;
+          }
+
+        case "left":
+          {
+            this.containerEl.style.transform = "scaleX(1)";
+            break;
+          }
+
+        case "right":
+          {
+            this.containerEl.style.transform = "scaleX(1)";
+            break;
+          }
+
+        // default same as "below"
+        default:
+          {
+            this.containerEl.style.transform = "scaleY(1)";
+          }
+      }
     } else {
       this.containerEl.style.transform = "translateY(0)";
     }
