@@ -609,10 +609,17 @@ var Popover = function (_React$Component) {
           Tip = _props.Tip;
       var standing = this.state.standing;
 
+      var targetEleBounds = {};
+      if (this.targetBounds && ["above", "below"].includes(standing)) {
+        var width = this.targetBounds.w;
 
+        targetEleBounds = {
+          minWidth: width
+        };
+      }
       var popoverProps = {
         className: "Popover Popover-" + standing + " " + className,
-        style: _extends({}, coreStyle, style)
+        style: _extends({}, coreStyle, targetEleBounds, style)
       };
 
       var popover = this.state.exited ? null : _react2.default.createElement(
