@@ -573,10 +573,21 @@ class Popover extends React.Component {
   render() {
     const { className = "", style = {}, tipSize, Tip } = this.props
     const { standing } = this.state
-
+    let targetEleBounds = {}
+    if (this.targetBounds &&
+        [ "above", "below" ].includes(standing)
+      ) {
+      const { w: width } = this.targetBounds
+      targetEleBounds = {
+        minWidth: width
+      }
+    }
     const popoverProps = {
       className: `Popover Popover-${standing} ${className}`,
-      style: { ...coreStyle, ...style },
+      style: {
+        ...coreStyle,
+        ...targetEleBounds,
+        ...style },
     }
 
     const popover = this.state.exited ? null : (
