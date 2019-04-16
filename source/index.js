@@ -82,7 +82,7 @@ class Popover extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      standing: "above",
+      standing: "",
       exited: !this.props.isOpen, // for animation-dependent rendering, should popover close/open?
       exiting: false, // for tracking in-progress animations
       toggle: this.props.isOpen || false, // for business logic tracking, should popover close/open?
@@ -147,16 +147,26 @@ class Popover extends React.Component {
     way at any time for any arbitrary trigger. There may be value in investigating the
     http://overconstrained.io community for its general layout system via the
     constraint-solver Cassowary. */
-    if (this.zone)
+
+    let zone
+    const desiredPlace = this.props.preferPlace || this.props.place
+    if (this.zone) {
       this.size[this.zone.flow === "row" ? "h" : "w"] += this.props.tipSize
-    const zone = Layout.pickZone(
-      pickerSettings,
-      this.frameBounds,
-      this.targetBounds,
-      this.size,
-    )
-    if (this.zone)
+      if (!desiredPlace) {
+        zone = this.zone
+      }
+    } else {
+      zone = Layout.pickZone(
+        pickerSettings,
+        this.frameBounds,
+        this.targetBounds,
+        this.size,
+      )
+    }
+
+    if (this.zone) {
       this.size[this.zone.flow === "row" ? "h" : "w"] -= this.props.tipSize
+    }
 
     const tb = this.targetBounds
     this.zone = zone
@@ -322,6 +332,7 @@ class Popover extends React.Component {
     log("exit!")
     this.animateExit()
     this.untrackPopover()
+    this.zone = null
   }
   animateExitStop() {
     clearTimeout(this.exitingAnimationTimer1)
@@ -572,8 +583,8 @@ class Popover extends React.Component {
   }
   render() {
     const { className = "", style = {}, tipSize, Tip } = this.props
-    const { standing } = this.state
-
+    let { standing } = this.state
+    standing = standing || "below"
     const popoverProps = {
       className: `Popover Popover-${standing} ${className}`,
       style: { ...coreStyle, ...style },
