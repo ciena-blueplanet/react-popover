@@ -149,7 +149,7 @@ var Popover = function (_React$Component) {
     };
 
     _this.state = {
-      standing: "above",
+      standing: "",
       exited: !_this.props.isOpen, // for animation-dependent rendering, should popover close/open?
       exiting: false, // for tracking in-progress animations
       toggle: _this.props.isOpen || false // for business logic tracking, should popover close/open?
@@ -223,9 +223,21 @@ var Popover = function (_React$Component) {
         way at any time for any arbitrary trigger. There may be value in investigating the
         http://overconstrained.io community for its general layout system via the
         constraint-solver Cassowary. */
-      };if (this.zone) this.size[this.zone.flow === "row" ? "h" : "w"] += this.props.tipSize;
-      var zone = _layout2.default.pickZone(pickerSettings, this.frameBounds, this.targetBounds, this.size);
-      if (this.zone) this.size[this.zone.flow === "row" ? "h" : "w"] -= this.props.tipSize;
+
+      };var zone = void 0;
+      var desiredPlace = this.props.preferPlace || this.props.place;
+      if (this.zone) {
+        this.size[this.zone.flow === "row" ? "h" : "w"] += this.props.tipSize;
+        if (!desiredPlace) {
+          zone = this.zone;
+        }
+      } else {
+        zone = _layout2.default.pickZone(pickerSettings, this.frameBounds, this.targetBounds, this.size);
+      }
+
+      if (this.zone) {
+        this.size[this.zone.flow === "row" ? "h" : "w"] -= this.props.tipSize;
+      }
 
       var tb = this.targetBounds;
       this.zone = zone;
@@ -384,6 +396,7 @@ var Popover = function (_React$Component) {
       log("exit!");
       this.animateExit();
       this.untrackPopover();
+      this.zone = null;
     }
   }, {
     key: "animateExitStop",
@@ -609,7 +622,7 @@ var Popover = function (_React$Component) {
           Tip = _props.Tip;
       var standing = this.state.standing;
 
-
+      standing = standing || "below";
       var popoverProps = {
         className: "Popover Popover-" + standing + " " + className,
         style: _extends({}, coreStyle, style)
