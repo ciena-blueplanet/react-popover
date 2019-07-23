@@ -35,7 +35,7 @@ axes.row.cross = {
 axes.column.main = axes.row.cross;
 axes.column.cross = axes.row.main;
 
-var types = [{ name: "side", values: ["start", "end"] }, { name: "standing", values: ["above", "right", "below", "left"] }, { name: "flow", values: ["column", "row"] }];
+var types = [{ name: "side", values: ["start", "end"] }, { name: "standing", values: ["above", "below"] }, { name: "flow", values: ["column", "row"] }];
 
 var validTypeValues = types.reduce(function (xs, _ref) {
   var values = _ref.values;
@@ -137,20 +137,6 @@ var pickZone = function pickZone(opts, frameBounds, targetBounds, size) {
   var t = targetBounds;
   var f = frameBounds;
   var zones = [{
-    side: "start",
-    standing: "above",
-    flow: "column",
-    order: -1,
-    w: f.x2,
-    h: t.y
-  }, {
-    side: "end",
-    standing: "right",
-    flow: "row",
-    order: 1,
-    w: f.x2 - t.x2,
-    h: f.y2
-  }, {
     side: "end",
     standing: "below",
     flow: "column",
@@ -159,11 +145,11 @@ var pickZone = function pickZone(opts, frameBounds, targetBounds, size) {
     h: f.y2 - t.y2
   }, {
     side: "start",
-    standing: "left",
-    flow: "row",
+    standing: "above",
+    flow: "column",
     order: -1,
-    w: t.x,
-    h: f.y2
+    w: f.x2,
+    h: t.y
   }];
 
   /* Order the zones by the amount of popup that would be cut out if that zone is used.
