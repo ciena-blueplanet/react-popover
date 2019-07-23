@@ -134,6 +134,14 @@ const pickZone = (opts, frameBounds, targetBounds, size) => {
   const f = frameBounds
   const zones = [
     {
+      side: "end",
+      standing: "below",
+      flow: "column",
+      order: 1,
+      w: f.x2,
+      h: f.y2 - t.y2,
+    },
+    {
       side: "start",
       standing: "above",
       flow: "column",
@@ -148,14 +156,6 @@ const pickZone = (opts, frameBounds, targetBounds, size) => {
       order: 1,
       w: f.x2 - t.x2,
       h: f.y2,
-    },
-    {
-      side: "end",
-      standing: "below",
-      flow: "column",
-      order: 1,
-      w: f.x2,
-      h: f.y2 - t.y2,
     },
     {
       side: "start",

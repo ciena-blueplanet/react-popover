@@ -137,6 +137,13 @@ var pickZone = function pickZone(opts, frameBounds, targetBounds, size) {
   var t = targetBounds;
   var f = frameBounds;
   var zones = [{
+    side: "end",
+    standing: "below",
+    flow: "column",
+    order: 1,
+    w: f.x2,
+    h: f.y2 - t.y2
+  }, {
     side: "start",
     standing: "above",
     flow: "column",
@@ -150,13 +157,6 @@ var pickZone = function pickZone(opts, frameBounds, targetBounds, size) {
     order: 1,
     w: f.x2 - t.x2,
     h: f.y2
-  }, {
-    side: "end",
-    standing: "below",
-    flow: "column",
-    order: 1,
-    w: f.x2,
-    h: f.y2 - t.y2
   }, {
     side: "start",
     standing: "left",
