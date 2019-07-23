@@ -27,7 +27,7 @@ axes.column.cross = axes.row.main
 
 const types = [
   { name: "side", values: ["start", "end"] },
-  { name: "standing", values: ["above", "right", "below", "left"] },
+  { name: "standing", values: ["above", "below"] },
   { name: "flow", values: ["column", "row"] },
 ]
 
@@ -148,22 +148,6 @@ const pickZone = (opts, frameBounds, targetBounds, size) => {
       order: -1,
       w: f.x2,
       h: t.y,
-    },
-    {
-      side: "end",
-      standing: "right",
-      flow: "row",
-      order: 1,
-      w: f.x2 - t.x2,
-      h: f.y2,
-    },
-    {
-      side: "start",
-      standing: "left",
-      flow: "row",
-      order: -1,
-      w: t.x,
-      h: f.y2,
     },
   ]
 
